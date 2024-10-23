@@ -1,0 +1,7 @@
+chromadb
+openai
+cohere
+pandas
+tiktoken
+fastapi
+fastapi-cors

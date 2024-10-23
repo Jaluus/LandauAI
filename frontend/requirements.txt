@@ -1,0 +1,13 @@
+cohere
+openai
+anthropic
+chainlit
+aiohttp
+sqlalchemy
+asyncpg
+langchain
+langchain_community
+langchain_anthropic
+langchain_openai
+langchain_ollama
+opencv-python

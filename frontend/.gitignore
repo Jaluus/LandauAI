@@ -1,0 +1,6 @@
+__pycache__
+.env
+.files
+chainlit
+saved_images/
+data/

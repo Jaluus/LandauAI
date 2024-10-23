@@ -1,0 +1,7 @@
+chromadb==0.5.5
+openai==1.41.0
+cohere==5.8.1
+pandas==2.2.2
+tiktoken==0.7.0
+fastapi==0.112.1
+fastapi-cors==0.0.6

@@ -1,0 +1,57 @@
+services:
+  chroma:
+    image: "chromadb/chroma:0.5.5"
+    restart: unless-stopped
+    environment:
+      - CHROMA_WORKERS=2
+    volumes:
+      - ./script_backend/data/chroma:/chroma/chroma
+    ports:
+      - 9666:8000
+
+  backend:
+    restart: unless-stopped
+    build:
+      context: ./script_backend
+      dockerfile: Dockerfile
+    depends_on:
+      - chroma
+    env_file:
+      - ./script_backend/.env
+    ports:
+      - 9667:7999
+
+  frontend:
+    restart: unless-stopped
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - 9668:7998
+    env_file:
+      - ./frontend/.env
+    environment:
+      - PERSISTENCE=true
+      - PG_DB_USER=postgres
+      - PG_DB_PASSWORD=postgres
+      - PG_DB_NAME=postgres
+      - PG_DB_HOST=postgres
+
+  postgres:
+    image: "postgres:16.4"
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - ./frontend/data/postgres:/var/lib/postgresql/data
+      - ./frontend/datalayer/pginit:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    ports:
+      - 9669:5432
